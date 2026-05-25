@@ -1,0 +1,22 @@
+program projserver;
+
+uses
+  Vcl.Forms,
+  uprinc in 'uprinc.pas' {frmprinc},
+  Horse in 'horse-master\src\Horse.pas',
+  Horse.Core in 'horse-master\src\Horse.Core.pas',
+  Horse.Provider.Console in 'horse-master\src\Horse.Provider.Console.pas',
+  Horse.Provider.Abstract in 'horse-master\src\Horse.Provider.Abstract.pas',
+  Horse.Request in 'horse-master\src\Horse.Request.pas',
+  Horse.Response in 'horse-master\src\Horse.Response.pas',
+  Horse.Core.Param in 'horse-master\src\Horse.Core.Param.pas',
+  Horse.Exception in 'horse-master\src\Horse.Exception.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(Tfrmprinc, frmprinc);
+  Application.Run;
+end.

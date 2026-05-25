@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/01/30 10:26:52.000.489,=C:\Users\maris\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2025/01/30 10:28:03.000.980,C:\egon\trabalho\servidor\modelo\uprinc.pas=C:\Users\maris\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2025/01/30 10:28:03.000.980,C:\egon\trabalho\servidor\modelo\uprinc.dfm=C:\Users\maris\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2025/01/30 10:28:12.000.801,C:\egon\trabalho\servidor\modelo\projserver.dproj=C:\Users\maris\OneDrive\Documentos\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2025/08/25 16:08:33.000.487,=D:\GIT\Servidor_GS2\horse-master\src\Horse.pas</Transaction>
+    <Transaction>2025/08/25 16:09:12.000.312,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.pas</Transaction>
+    <Transaction>2025/08/25 16:09:46.000.482,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.Console.pas</Transaction>
+    <Transaction>2025/08/25 16:10:08.000.903,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.Abstract.pas</Transaction>
+    <Transaction>2025/08/25 16:10:36.000.121,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Request.pas</Transaction>
+    <Transaction>2025/08/25 16:10:36.000.130,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Response.pas</Transaction>
+    <Transaction>2025/08/25 16:10:51.000.630,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Param.pas</Transaction>
+    <Transaction>2025/08/25 16:11:10.000.176,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Exception.pas</Transaction>
+    <Transaction>2025/08/25 16:11:29.000.974,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Commons.pas</Transaction>
+    <Transaction>2025/08/25 16:11:49.000.731,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Param.Field.Brackets.pas</Transaction>
+    <Transaction>2025/08/25 16:11:49.000.722,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Param.Config.pas</Transaction>
+    <Transaction>2025/08/25 16:11:49.000.742,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Param.Field.pas</Transaction>
+    <Transaction>2025/08/25 16:11:50.000.575,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Param.Header.pas</Transaction>
+    <Transaction>2025/08/25 16:12:11.000.314,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Rtti.Helper.pas</Transaction>
+    <Transaction>2025/08/25 16:12:11.000.334,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Rtti.pas</Transaction>
+    <Transaction>2025/08/25 16:12:28.000.177,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Session.pas</Transaction>
+    <Transaction>2025/08/25 16:12:28.000.272,=D:\GIT\Servidor_GS2\horse-master\src\Horse.WebModule.pas</Transaction>
+    <Transaction>2025/08/25 16:12:55.000.915,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Files.pas</Transaction>
+    <Transaction>2025/08/25 16:13:11.000.215,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Mime.pas</Transaction>
+    <Transaction>2025/08/25 16:13:57.000.250,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.RouterTree.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.143,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Callback.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.443,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.Apache.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.372,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Proc.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.407,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.CGI.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.643,=D:\GIT\Servidor_GS2\horse-master\src\ThirdParty.Posix.Syslog.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.192,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Group.Contract.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.492,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.HTTPApplication.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.205,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Group.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.517,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.IOHandleSSL.Contract.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.530,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.IOHandleSSL.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.543,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.ISAPI.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.278,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Route.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.480,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.FastCGI.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.162,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Constants.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.505,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.LCL.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.455,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.CGI.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.556,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.VCL.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.658,=D:\GIT\Servidor_GS2\horse-master\src\Web.WebConst.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.313,=D:\GIT\Servidor_GS2\horse-master\src\Horse.EnvironmentVariables.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.468,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.FPC.Daemon.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.325,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Exception.Interrupted.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.290,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.RouterTree.NextCaller.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.267,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Core.Route.Contract.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.431,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.Daemon.pas</Transaction>
+    <Transaction>2025/08/25 16:14:18.000.396,=D:\GIT\Servidor_GS2\horse-master\src\Horse.Provider.Apache.pas</Transaction>
+  </Transactions>
+</BorlandProject>

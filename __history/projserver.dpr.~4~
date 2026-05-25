@@ -1,0 +1,32 @@
+program projserver;
+
+uses
+  Vcl.Forms,
+  uprinc in 'uprinc.pas' {frmprinc},
+  Horse in 'horse-master\src\Horse.pas',
+  Horse.Core in 'horse-master\src\Horse.Core.pas',
+  Horse.Provider.Console in 'horse-master\src\Horse.Provider.Console.pas',
+  Horse.Provider.Abstract in 'horse-master\src\Horse.Provider.Abstract.pas',
+  Horse.Request in 'horse-master\src\Horse.Request.pas',
+  Horse.Response in 'horse-master\src\Horse.Response.pas',
+  Horse.Core.Param in 'horse-master\src\Horse.Core.Param.pas',
+  Horse.Exception in 'horse-master\src\Horse.Exception.pas',
+  Horse.Commons in 'horse-master\src\Horse.Commons.pas',
+  Horse.Core.Param.Config in 'horse-master\src\Horse.Core.Param.Config.pas',
+  Horse.Core.Param.Field.Brackets in 'horse-master\src\Horse.Core.Param.Field.Brackets.pas',
+  Horse.Core.Param.Field in 'horse-master\src\Horse.Core.Param.Field.pas',
+  Horse.Core.Param.Header in 'horse-master\src\Horse.Core.Param.Header.pas',
+  Horse.Rtti.Helper in 'horse-master\src\Horse.Rtti.Helper.pas',
+  Horse.Rtti in 'horse-master\src\Horse.Rtti.pas',
+  Horse.Session in 'horse-master\src\Horse.Session.pas',
+  Horse.WebModule in 'horse-master\src\Horse.WebModule.pas' {HorseWebModule: TWebModule},
+  Horse.Core.Files in 'horse-master\src\Horse.Core.Files.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(Tfrmprinc, frmprinc);
+  Application.Run;
+end.

@@ -1,0 +1,17 @@
+program projserver;
+
+uses
+  Vcl.Forms,
+  uprinc in 'uprinc.pas' {frmprinc},
+  Horse in 'horse-master\src\Horse.pas',
+  Horse.Core in 'horse-master\src\Horse.Core.pas',
+  Horse.Provider.Console in 'horse-master\src\Horse.Provider.Console.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(Tfrmprinc, frmprinc);
+  Application.Run;
+end.

@@ -1,0 +1,46 @@
+object frmprinc: Tfrmprinc
+  Left = 0
+  Top = 0
+  BorderStyle = bsSingle
+  Caption = 'Servidor HORSE'
+  ClientHeight = 326
+  ClientWidth = 755
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  DesignSize = (
+    755
+    326)
+  PixelsPerInch = 96
+  TextHeight = 13
+  object fundo: TShape
+    Left = 4
+    Top = 29
+    Width = 65
+    Height = 65
+    Brush.Color = clCream
+  end
+  object pntitulo: TPanel
+    Left = 15
+    Top = 12
+    Width = 729
+    Height = 65
+    Anchors = [akLeft, akTop, akRight]
+    Caption = 'Servidor HORSE'
+    Color = clHighlight
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindow
+    Font.Height = -40
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 0
+  end
+end
