@@ -2,7 +2,7 @@ object frmprinc: Tfrmprinc
   Left = 0
   Top = 0
   BorderStyle = bsSingle
-  Caption = 'Servidor HORSE'
+  Caption = 'G2 Services - Vers'#227'o 1.1.0.0'
   ClientHeight = 214
   ClientWidth = 762
   Color = clBtnFace
@@ -50,7 +50,7 @@ object frmprinc: Tfrmprinc
     Width = 736
     Height = 65
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Servidor HORSE'
+    Caption = 'G2 Services - Vers'#227'o 1.1.0.0'
     Color = clHighlight
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindow

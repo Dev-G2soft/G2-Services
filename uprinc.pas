@@ -15,7 +15,7 @@ uses
   Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms,
-  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls, Vcl.Mask;
+  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls, Vcl.Mask, System.DateUtils;
 
 type
   Tfrmprinc = class(TForm)
@@ -39,6 +39,12 @@ type
     procedure Log_Add(const Mensagem: string);
   private
     { Private declarations }
+    //--------------------Json do /APP
+    FAppCacheJson: string;
+    FAppCacheAtualizadoEm: TDateTime;
+    procedure AtualizarCacheApp;
+    procedure SA_Rota_GET_App(Req: THorseRequest; Res: THorseResponse);
+
   public
     dti           : TDateTime;
     qtde          : integer;
@@ -51,6 +57,8 @@ var
 implementation
 
 {$R *.dfm}
+
+uses uDM;
 
 
 //------------------------------------------------------------------------------
@@ -242,6 +250,8 @@ begin
    //---------------------------------------------------------------------------
 end;
 //------------------------------------------------------------------------------
+
+
 procedure Tfrmprinc.btativa_desativaClick(Sender: TObject);
 begin
    //---------------------------------------------------------------------------
@@ -276,6 +286,58 @@ begin
    btativa_desativa.Click;
 end;
 
+procedure Tfrmprinc.AtualizarCacheApp;
+var
+  Json: TJSONObject;
+begin
+  Json := TJSONObject.Create;
+  try
+    DM.ZQApp.Close;
+    DM.ZQApp.SQL.Text := 'SELECT * FROM apps WHERE nome = :nome';
+    DM.ZQApp.ParamByName('nome').AsString := 'G2_UPDATE';
+    DM.ZQApp.Open;
+
+    if DM.ZQApp.IsEmpty then
+    begin
+      Json.AddPair('status', 'FALHA');
+      Json.AddPair('motivo', 'Nenhum registro encontrado');
+    end
+    else
+    begin
+      Json.AddPair('status', 'OK');
+      Json.AddPair('nome', DM.ZQApp.FieldByName('nome').AsString);
+      Json.AddPair('versao', DM.ZQApp.FieldByName('versao_up').AsString);
+      Json.AddPair('link', DM.ZQApp.FieldByName('link_download').AsString);
+    end;
+
+    FAppCacheJson := Json.ToJSON.Replace('\/', '/');
+    FAppCacheAtualizadoEm := Now;
+  finally
+    Json.Free;
+  end;
+end;
+
+procedure Tfrmprinc.SA_Rota_GET_App(Req: THorseRequest; Res: THorseResponse);
+begin
+  Inc(frmprinc.qtde);
+
+  try
+    if (FAppCacheJson = '') or
+       (MinutesBetween(Now, FAppCacheAtualizadoEm) >= 10) then
+    begin
+      AtualizarCacheApp;
+    end;
+
+    Res.Send(FAppCacheJson).Status(200);
+  except
+    on E: Exception do
+    begin
+      Log_Add('Erro na rota /app: ' + E.Message);
+      Res.Send('{"status":"ERRO","motivo":"' + E.Message + '"}').Status(500);
+    end;
+  end;
+end;
+
 procedure Tfrmprinc.FormCreate(Sender: TObject);
 begin
    //---------------------------------------------------------------------------
@@ -285,6 +347,8 @@ begin
    //---------------------------------------------------------------------------
    THorse.Get('/ativo',SA_Rota_GET_Ativo);
    //---------------------------------------------------------------------------
+   // nova rota para consultar dados da tabela app
+   THorse.Get('/app',SA_Rota_GET_App);
 end;
 
 procedure Tfrmprinc.TimerTimer(Sender: TObject);
@@ -340,6 +404,8 @@ begin
     CloseFile(LogFile);
   end;
 end;
+
+
 
 
 

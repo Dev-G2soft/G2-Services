@@ -1,0 +1,394 @@
+unit uprinc;
+
+interface
+
+uses
+  Horse,
+  synacode,
+  ACBrNFe,
+  System.JSON,
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Vcl.Graphics,
+  Vcl.Controls,
+  Vcl.Forms,
+  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls, Vcl.Mask;
+
+type
+  Tfrmprinc = class(TForm)
+    fundo: TShape;
+    pntitulo: TPanel;
+    btfechar: TSpeedButton;
+    pnconfig: TPanel;
+    Label1: TLabel;
+    btativa_desativa: TSpeedButton;
+    lbstatus: TLabel;
+    edtporta: TMaskEdit;
+    Timer: TTimer;
+    pnrodape: TPanel;
+    Label2: TLabel;
+    edtconexoes: TMaskEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure btfecharClick(Sender: TObject);
+    procedure btativa_desativaClick(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure Log_Add(const Mensagem: string);
+  private
+    { Private declarations }
+    procedure SA_Rota_GET_App(Req: THorseRequest; Res: THorseResponse);
+  public
+    dti           : TDateTime;
+    qtde          : integer;
+    const diretorio = 'D:\ArquivosXML';
+  end;
+
+var
+  frmprinc: Tfrmprinc;
+
+implementation
+
+{$R *.dfm}
+
+uses uDM;
+
+
+//------------------------------------------------------------------------------
+//   Procedure para liberar a memória não usada, limpar o lixo da memória, o DELPHI tem essa característica.
+//   informação de http://www.agnaldocarmo.com.br/home/comando-milagroso-para-reducao-de-memoria-delphi/
+//   Colocar em USES "psapi"
+//------------------------------------------------------------------------------
+procedure SA_Limpar_Memoria;
+var
+   MainHandle : THandle;
+begin
+   try
+      MainHandle := OpenProcess(PROCESS_ALL_ACCESS, false, GetCurrentProcessID) ;
+      SetProcessWorkingSetSize(MainHandle, $FFFFFFFF, $FFFFFFFF) ;
+      CloseHandle(MainHandle) ;
+   except
+   end;
+   Application.ProcessMessages;
+ end;
+//------------------------------------------------------------------------------
+//   Calcular tempo entre dois instantes
+//------------------------------------------------------------------------------
+function calcularDiferencaHoras(DataHoraI,DataHoraF:TDateTime):string;
+var
+   Dias     : Integer;
+   Total    : Real;
+   Horas    : Real;
+   H        : Word;
+   M        : Word;
+   S        : Word;
+   SS       : Word;
+begin
+   if DataHoraI > DataHoraF then
+      Total := DataHoraI - DataHoraF
+   else
+      Total:= DataHoraF - DataHoraI;
+   Dias := Trunc(total);
+   Horas:=total - Trunc(total);
+   Decodetime(Horas,H,M,S,SS);
+   H := H +24 * TRunc(dias);
+   if Dias>0 then
+      Result := inttostr(dias)+' Dias ' + FormatFloat('#00',H)+':'+FormatFloat('00',m)+':'+FormatFloat('00',s)
+   else
+      Result := FormatFloat('#00',H)+':'+FormatFloat('00',m)+':'+FormatFloat('00',s);
+end;
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+//   Rota para operar endpoint
+//------------------------------------------------------------------------------
+procedure SA_Rota_GET_Ativo(Req: THorseRequest; Res: THorseResponse);
+begin
+   //---------------------------------------------------------------------------
+   inc(frmprinc.qtde);   // Incrementando a quantidade de conexões apresdentadas na tela
+   //---------------------------------------------------------------------------
+   Res.Send('{"status":"OK","motivo":"Servidor ativo"}').Status(200);
+   //---------------------------------------------------------------------------
+end;
+//------------------------------------------------------------------------------
+//   Salvar uma WIDESTRING em arquivo
+//------------------------------------------------------------------------------
+function SA_Salvar_Dados(dados:String;arquivo_nome:string):boolean;
+var
+   arquivo : TextFile;
+begin
+   try
+      AssignFile(arquivo,arquivo_nome);
+      Rewrite(arquivo);
+      Write(arquivo,dados);
+      CloseFile(arquivo);
+      Result := true;
+   except
+      Result := false;
+   end;
+end;
+//------------------------------------------------------------------------------
+//   Lista de arquivos para atualizar
+//------------------------------------------------------------------------------
+procedure SA_Rota_GET_Upload(Req: THorseRequest; Res: THorseResponse);
+var
+   //---------------------------------------------------------------------------
+   dados   : string;
+   body    : TJSONValue;
+   nfe     : TACBrNFe;
+   CNPJ    : string;
+   Data    : string;
+   arquivo : string;
+   local   : string;
+   //---------------------------------------------------------------------------
+begin
+   //---------------------------------------------------------------------------
+   inc(frmprinc.qtde);
+   //---------------------------------------------------------------------------
+   body     := TJSonObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body),0) as TJSONValue;
+   //---------------------------------------------------------------------------
+   if body=nil then
+      begin
+         //---------------------------------------------------------------------
+         Res.Send('{"status":"FALHA","motivo":"Conteudo invalido"}').Status(400);
+         body.Free;
+         exit;
+         //---------------------------------------------------------------------
+      end;
+   //---------------------------------------------------------------------------
+   dados        := string(DecodeBase64(ansistring(body.GetValue<string>('dados',''))));
+
+    //showMessage(dados);
+   body.Free;
+   //---------------------------------------------------------------------------
+   if dados<>'' then
+      begin
+         //---------------------------------------------------------------
+         TThread.CreateAnonymousThread(procedure
+            begin
+               //---------------------------------------------------------
+               try
+                 nfe   := TACBrNFe.Create(frmprinc);
+                 nfe.NotasFiscais.Clear;
+                 nfe.NotasFiscais.LoadFromString(dados);
+
+                 //showMessage(nfe.NotasFiscais.Items[0].NFe.Emit.CNPJCPF);
+
+
+                 if nfe.NotasFiscais.Count > 0 then
+                    begin
+                       //---------------------------------------------------------
+                       CNPJ    := '';
+                       Data    := '';
+                       arquivo := '';
+                       local   := '';
+                       //---------------------------------------------------------
+                       try
+                          CNPJ    := nfe.NotasFiscais.Items[0].NFe.Emit.CNPJCPF;
+                          Data    := formatdatetime('yyyymm',nfe.NotasFiscais.Items[0].NFe.Ide.dEmi);
+                          arquivo := nfe.NotasFiscais.Items[0].NFe.procNFe.chNFe;
+
+                          local:= 'NFCE';
+                          if nfe.NotasFiscais.Items[0].NFe.Ide.modelo = 55 then
+                          begin
+                            local:= 'NFE';
+                          end;
+
+                       except
+                       end;
+                       //---------------------------------------------------------
+                       if (cnpj<>'') and (arquivo<>'') then
+                          begin
+                            //criar cnpj
+                             if not DirectoryExists(frmprinc.diretorio+'\'+cnpj) then
+                             begin
+                                createdir(frmprinc.diretorio+'\'+cnpj);
+                             end;
+
+                             // criar local NFCE ou NFE
+                             if not DirectoryExists(frmprinc.diretorio+'\'+cnpj+'\'+local) then
+                             begin
+                                createdir(frmprinc.diretorio+'\'+cnpj+'\'+local);
+                             end;
+
+                             // criar pasta data
+                             if not DirectoryExists(frmprinc.diretorio+'\'+cnpj+'\'+local+'\'+data) then
+                             begin
+                                createdir(frmprinc.diretorio+'\'+cnpj+'\'+local+'\'+data);
+                             end;
+
+                             //---------------------------------------------------
+                             SA_Salvar_Dados(dados,frmprinc.diretorio+'\'+cnpj+'\'+local+'\'+data+'\'+arquivo+'.xml');
+                             //---------------------------------------------------
+                          end;
+                    end;
+                 //---------------------------------------------------------------
+                 nfe.Free;
+
+                Except
+                on e: exception do
+                begin
+                  frmprinc.Log_Add( 'Erro: '+ e.Message);
+                  //exit;
+                End;
+              end;
+               //---------------------------------------------------------------
+            end).Start;
+         //---------------------------------------------------------------------
+         Res.Send('{"status":"OK","motivo":"Executado"}').Status(200);
+         //---------------------------------------------------------------
+      end
+   else
+      Res.Send('{"status":"FALHA","motivo":"Sem dados"}').Status(404);
+   //---------------------------------------------------------------------------
+end;
+//------------------------------------------------------------------------------
+procedure Tfrmprinc.btativa_desativaClick(Sender: TObject);
+begin
+   //---------------------------------------------------------------------------
+   if THorse.IsRunning then
+      THorse.StopListen
+   else
+      begin
+         try
+            THorse.Listen(strtointdef(edtporta.Text,19036));
+            dti                      := now;
+            qtde                     := 0;
+            btativa_desativa.Caption := 'Desativar';
+         except
+
+         end;
+      end;
+   //---------------------------------------------------------------------------
+   edtporta.Enabled := not THorse.IsRunning;
+   //---------------------------------------------------------------------------
+
+end;
+
+procedure Tfrmprinc.btfecharClick(Sender: TObject);
+begin
+   THorse.StopListen;
+   Application.Terminate;
+end;
+
+procedure Tfrmprinc.FormActivate(Sender: TObject);
+begin
+   fundo.Align := alClient;
+   btativa_desativa.Click;
+end;
+
+procedure Tfrmprinc.SA_Rota_GET_App(Req: THorseRequest; Res: THorseResponse);
+var
+  Json: TJSONObject;
+begin
+  Inc(frmprinc.qtde);
+
+  Json := TJSONObject.Create;
+  try
+    try
+      DM.ZQApp.Close;
+      DM.ZQApp.SQL.Text := 'SELECT * FROM apps WHERE nome = :nome';
+      DM.ZQApp.ParamByName('nome').AsString := 'G2Portal';
+      DM.ZQApp.Open;
+
+      if DM.ZQApp.IsEmpty then
+      begin
+        Json.AddPair('status', 'FALHA');
+        Json.AddPair('motivo', 'Nenhum registro encontrado');
+        Res.Send<TJSONObject>(Json).Status(404);
+        Exit;
+      end;
+
+      Json.AddPair('status', 'OK');
+      Json.AddPair('nome', DM.ZQApp.FieldByName('nome').AsString);
+      Json.AddPair('versao', DM.ZQApp.FieldByName('versao_up').AsString);
+      Json.AddPair('link', DM.ZQApp.FieldByName('link_download').AsString);
+
+      Res.Send<TJSONObject>(Json).Status(200);
+    except
+      on E: Exception do
+      begin
+        Json.Free;
+        Res.Send('{"status":"ERRO","motivo":"' + E.Message + '"}').Status(500);
+      end;
+    end;
+  except
+  end;
+
+end;
+
+procedure Tfrmprinc.FormCreate(Sender: TObject);
+begin
+   //---------------------------------------------------------------------------
+   //   Rotas GET
+   //---------------------------------------------------------------------------
+   THorse.Post('/upload',SA_Rota_GET_Upload);
+   //---------------------------------------------------------------------------
+   THorse.Get('/ativo',SA_Rota_GET_Ativo);
+   //---------------------------------------------------------------------------
+   // nova rota para consultar dados da tabela app
+   THorse.Get('/app',SA_Rota_GET_App);
+end;
+
+procedure Tfrmprinc.TimerTimer(Sender: TObject);
+begin
+   //---------------------------------------------------------------------------
+   timer.Enabled := false;   // Desativando timer para não empilhar
+   //---------------------------------------------------------------------------
+   if THorse.IsRunning then
+      begin
+         lbstatus.Caption           := 'Operando desde '+formatdatetime('dd/mm/yyyy hh:mm:ss',dti)+'   | '+calcularDiferencaHoras(dti,now);
+         edtconexoes.Text           := qtde.ToString;
+      end
+   else
+      begin
+         lbstatus.Caption := 'Servidor inativo';
+         edtconexoes.Text := '';
+      end;
+   //---------------------------------------------------------------------------
+   SA_Limpar_Memoria;
+   //---------------------------------------------------------------------------
+   timer.Enabled := true;    // Reativando timer
+   //---------------------------------------------------------------------------
+end;
+
+
+
+
+
+procedure Tfrmprinc.Log_Add(const Mensagem: string);
+var
+  LogFile: TextFile;
+  NomeArquivo: string;
+begin
+  // Caminho do arquivo de log
+  NomeArquivo := 'C:\G2 Soft\logs\servidor_envio_xml.txt';
+
+  // Cria a pasta se não existir
+  if not DirectoryExists(ExtractFilePath(NomeArquivo)) then
+    ForceDirectories(ExtractFilePath(NomeArquivo));
+
+  // Associa a variável ao arquivo
+  AssignFile(LogFile, NomeArquivo);
+
+  // Se o arquivo já existe, abre para acrescentar; senão, cria
+  if FileExists(NomeArquivo) then
+    Append(LogFile)
+  else
+    Rewrite(LogFile);
+
+  try
+    Writeln(LogFile, FormatDateTime('yyyy-mm-dd hh:nn:ss', Now) + ' - ' + Mensagem);
+  finally
+    CloseFile(LogFile);
+  end;
+end;
+
+
+
+
+
+
+end.

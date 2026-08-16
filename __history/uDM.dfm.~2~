@@ -1,0 +1,24 @@
+object DM: TDM
+  OldCreateOrder = False
+  Height = 609
+  Width = 807
+  object ZConexaoBancR: TZConnection
+    ControlsCodePage = cCP_UTF16
+    Catalog = ''
+    DisableSavepoints = False
+    HostName = 'localhost'
+    Port = 3307
+    Database = 'bancr'
+    User = 'g2user'
+    Password = 'ASdf963a'
+    Protocol = 'mysql'
+    Left = 80
+    Top = 64
+  end
+  object ZQApp: TZQuery
+    Connection = ZConexaoBancR
+    Params = <>
+    Left = 80
+    Top = 128
+  end
+end
